@@ -81,8 +81,12 @@ module.exports = {
         ]
       },
       {
-        test: /\.(?:ico|png|jpg|svg|gif)$/,
+        test: /\.(?:ico|png|jpg|gif)$/,
         type: 'asset/resource'
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader'
       },
       {
         test: /\.(ttf|otf|woff|woff2|eot)$/,
