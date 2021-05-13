@@ -25,6 +25,20 @@ const optimization = () => {
   return config;
 };
 
+// const cssLoaders = extra => {
+//   const loaders = [
+//     MiniCssExtractPlugin.loader,
+//     'css-loader',
+//     'sass-loader'
+//   ];
+//
+//   if (isProd) {
+//     loaders.splice(-2, 0, extra);
+//   }
+
+//   return loaders;
+// };
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
@@ -33,7 +47,7 @@ module.exports = {
     analytics: './analytics.js'
   },
   output: {
-    filename: '[name].[contenthash].js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   resolve: {
@@ -60,13 +74,13 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src/favicon.ico'),
-          to: path.resolve(__dirname, 'dist')
+          from: path.resolve(__dirname, 'src/img'),
+          to: path.resolve(__dirname, 'dist/img')
         }
       ]
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
+      filename: '[name].css'
     })
   ],
   module: {
@@ -81,8 +95,32 @@ module.exports = {
         ]
       },
       {
-        test: /\.(?:ico|png|jpg|gif)$/,
-        type: 'asset/resource'
+        test: /\.(?:ico|png|jpe?g|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: { name: '[path][name].[ext]', emitFile: false }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: true,
+              mozjpeg: {
+                progressive: true
+              },
+              optipng: {
+                enabled: false
+              },
+              pngquant: {
+                quality: [0.65, 0.90],
+                speed: 4
+              },
+              gifsicle: {
+                interlaced: false
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.svg$/,
@@ -90,7 +128,7 @@ module.exports = {
       },
       {
         test: /\.(ttf|otf|woff|woff2|eot)$/,
-        type: 'asset/inline'
+        use: ['file-loader']
       },
       {
         test: /\.xml$/,
