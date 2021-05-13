@@ -1,7 +1,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
@@ -71,14 +71,14 @@ module.exports = {
       }
     }),
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'src/img'),
-          to: path.resolve(__dirname, 'dist/img')
-        }
-      ]
-    }),
+    // new CopyWebpackPlugin({
+    //   patterns: [
+    //     {
+    //       from: path.resolve(__dirname, 'src/img'),
+    //       to: path.resolve(__dirname, 'dist/img')
+    //     }
+    //   ]
+    // }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     })
@@ -99,12 +99,13 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: { name: '[path][name].[ext]', emitFile: false }
+            options: {
+              name: '[path][name].[ext]'
+            }
           },
           {
             loader: 'image-webpack-loader',
             options: {
-              disable: true,
               mozjpeg: {
                 progressive: true
               },
